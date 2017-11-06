@@ -1,10 +1,10 @@
 module Htmltoword
   class Railtie < ::Rails::Railtie
     initializer 'htmltoword.setup' do
-      unless defined? Mime::DOCX
+      if defined?(Mime) and Mime[:docx].nil?
         Mime::Type.register 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', :docx
       end
-
+      
       ActionController::Renderers.add :docx do |file_name, options|
         Htmltoword::Renderer.send_file(self, file_name, options)
       end
